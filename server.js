@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { json } from 'express';
 import mongoose from 'mongoose';
 import productRouter from './product.routes.js';
 
@@ -12,7 +12,11 @@ const connectMongoDb = async () => {
 const startHTTPApi = () => {
   const app = express();
 
+  // Middleware para decirle a Express que los body serán JSON (método POST)
+  app.use(express.json());
+
   app.use('/products', productRouter);
+  app.use('/products/:productId', productRouter);
 
   app.listen(3000, () => {
     console.log('Up & running on port: ', 3000);
