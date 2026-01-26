@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
+import { Product } from './product.js';
+
 const app = express();
 
 try {
@@ -12,7 +14,14 @@ try {
   console.log('Mongodb error', error);
 }
 
-app.get('/example', (req, res) => {
+app.get('/example', async (req, res) => {
+  const product = new Product({
+    name: 'test',
+    description: 'description - test',
+  });
+
+  await product.save();
+
   res.json({
     info: 'first endpoint',
   });
