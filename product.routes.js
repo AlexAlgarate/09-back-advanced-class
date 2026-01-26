@@ -39,4 +39,21 @@ productRouter.post('/', async (req, res) => {
   return res.status(201).json({ content: productDb });
 });
 
+productRouter.patch('/:productId', async (req, res) => {
+  const { productId } = req.params;
+  const { name, description } = req.body;
+
+  const updatedProduct = await Product.findByIdAndUpdate(
+    productId,
+    { name, description },
+    { new: true },
+  );
+
+  if (!updatedProduct) {
+    return res.status(400).json({ message: 'Not found' });
+  }
+
+  return res.status(200).json({ content: updatedProduct });
+});
+
 export default productRouter;
