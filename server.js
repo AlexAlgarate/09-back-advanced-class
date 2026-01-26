@@ -3,23 +3,34 @@ import mongoose from 'mongoose';
 
 import { Product } from './product.js';
 
-const app = express();
-
-try {
+const connectMongoDb = async () => {
   await mongoose.connect(
     'mongodb://admin:admin123@localhost:27017/db?authSource=admin',
   );
   console.log('Mongodb connected!');
-} catch (error) {
-  console.log('Mongodb error', error);
-}
+};
 
-app.get('/products', async (req, res) => {
-  const products = await Product.find();
+const startHTTPApi = () => {
+  const app = express();
 
-  res.json({ content: products });
-});
+  app.get('/products', async (req, res) => {
+    const products = await Product.find();
 
-app.listen(3000, () => {
-  console.log('Up & running on port: ', 3000);
-});
+    res.json({ content: products });
+  });
+
+  app.listen(3000, () => {
+    console.log('Up & running on port: ', 3000);
+  });
+};
+const executeApp = async () => {
+  try {
+    await connectMongoDb();
+    startHTTPApi();
+  } catch (error) {
+    console.log('Unable to start application', error);
+    process.exit(1);
+  }
+};
+
+executeApp();
