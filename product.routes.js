@@ -56,4 +56,15 @@ productRouter.patch('/:productId', async (req, res) => {
   return res.status(200).json({ content: updatedProduct });
 });
 
+productRouter.delete('/:productId', async (req, res) => {
+  const { productId } = req.params;
+
+  const deletedProduct = await Product.findByIdAndDelete(productId);
+
+  if (!deletedProduct) {
+    return res.status(400).json({ message: 'Not found' });
+  }
+  return res.json({ message: 'Product removed successfully' });
+});
+
 export default productRouter;
