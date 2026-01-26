@@ -14,17 +14,10 @@ try {
   console.log('Mongodb error', error);
 }
 
-app.get('/example', async (req, res) => {
-  const product = new Product({
-    name: 'test',
-    description: 'description - test',
-  });
+app.get('/products', async (req, res) => {
+  const products = await Product.find();
 
-  await product.save();
-
-  res.json({
-    info: 'first endpoint',
-  });
+  res.json({ content: products });
 });
 
 app.listen(3000, () => {
