@@ -1,7 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-
-import { Product } from './product.js';
+import productRouter from './product.routes.js';
 
 const connectMongoDb = async () => {
   await mongoose.connect(
@@ -13,11 +12,7 @@ const connectMongoDb = async () => {
 const startHTTPApi = () => {
   const app = express();
 
-  app.get('/products', async (req, res) => {
-    const products = await Product.find();
-
-    res.json({ content: products });
-  });
+  app.use('/products', productRouter);
 
   app.listen(3000, () => {
     console.log('Up & running on port: ', 3000);
