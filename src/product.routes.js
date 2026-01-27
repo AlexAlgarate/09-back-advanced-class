@@ -46,7 +46,7 @@ productRouter.patch('/:productId', async (req, res) => {
   const updatedProduct = await Product.findByIdAndUpdate(
     productId,
     { name, description },
-    { new: true },
+    { new: true }
   );
 
   if (!updatedProduct) {
