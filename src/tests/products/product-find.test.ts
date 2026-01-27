@@ -30,3 +30,26 @@ describe('GET /products/:productId', () => {
     });
   });
 });
+
+describe('GET /products', () => {
+  it('Should return an empty array when there are no products', async () => {
+    const response = await request(app).get('/products').send();
+
+    expect(response.body.content.length).toBe(0);
+  });
+
+  it('Should return a list of products', async () => {
+    await request(app).post('/products').send({
+      name: 'test1',
+      description: 'test1',
+    });
+    await request(app).post('/products').send({
+      name: 'test2',
+      description: 'test2',
+    });
+
+    const response = await request(app).get('/products').send();
+
+    expect(response.body.content.length).toBe(2);
+  });
+});
