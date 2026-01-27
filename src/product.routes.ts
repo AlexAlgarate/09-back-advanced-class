@@ -4,7 +4,7 @@ import { Product } from './product';
 
 const productRouter = express.Router();
 
-productRouter.get('/', async (req, res) => {
+productRouter.get('/', async (_req, res) => {
   const products = await Product.find();
   res.json({ content: products });
 });
@@ -18,7 +18,7 @@ productRouter.get('/:productId', async (req, res) => {
     return res.status(404).json({ error: 'Product Not Found' });
   }
 
-  res.json({ content: product });
+  return res.json({ content: product });
 });
 
 productRouter.post('/', async (req, res) => {

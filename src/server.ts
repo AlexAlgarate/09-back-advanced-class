@@ -2,12 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import productRouter from './product.routes';
 
-const connectMongoDb = async () => {
+const connectMongoDb = async (): Promise<void> => {
   await mongoose.connect('mongodb://admin:admin123@localhost:27017/db?authSource=admin');
   console.log('Mongodb connected!');
 };
 
-const startHTTPApi = () => {
+const startHTTPApi = (): void => {
   const app = express();
 
   // Middleware para decirle a Express que los body serán JSON (método POST)
@@ -20,7 +20,7 @@ const startHTTPApi = () => {
     console.log('Up & running on port: ', 3000);
   });
 };
-const executeApp = async () => {
+const executeApp = async (): Promise<void> => {
   try {
     await connectMongoDb();
     startHTTPApi();
