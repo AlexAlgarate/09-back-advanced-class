@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../../api';
 
-describe('GET /products', () => {
+describe('GET /products/:productId', () => {
   const _ID_MONGO = '6979054b067bd17c70d31fbf';
 
   it('Should return a 404 if a product does not exist', async () => {
