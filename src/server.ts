@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import productRouter from './product.routes.js';
+import productRouter from './product.routes';
 
 const connectMongoDb = async () => {
   await mongoose.connect('mongodb://admin:admin123@localhost:27017/db?authSource=admin');
