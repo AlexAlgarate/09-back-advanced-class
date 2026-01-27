@@ -9,7 +9,7 @@
     "lint": "eslint",
     "format": "prettier --write src/**/*.ts",
     "build": "tsc",
-    "test:e2e": "jest"
+    "test:e2e": "jest --watch"
   },
   "repository": {
     "type": "git",
