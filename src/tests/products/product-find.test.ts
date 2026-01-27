@@ -10,5 +10,23 @@ describe('GET /products', () => {
     expect(response.status).toBe(404);
     expect(response.body).toStrictEqual({ error: 'Product Not Found' });
   });
-  it('Should return the requests product', () => {});
+  it('Should return the requests product', async () => {
+    const product = await request(app).post('/products').send({
+      name: 'test',
+      description: 'test',
+    });
+
+    const productId = product.body.content._id;
+
+    const response = await request(app).get(`/products/${productId}`).send();
+
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({
+      content: {
+        name: 'test',
+        description: 'test',
+        __v: 0,
+      },
+    });
+  });
 });
