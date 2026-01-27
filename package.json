@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/server.js",
+    "start": "tsx watch src/server.ts",
     "lint": "eslint",
-    "format": "prettier --write src/**/*.js"
+    "format": "prettier --write src/**/*.ts"
   },
   "repository": {
     "type": "git",
