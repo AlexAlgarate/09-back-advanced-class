@@ -1,18 +1,19 @@
 import { Router } from 'express';
 
-import { Product } from './product';
+import { ProductModel } from '../../infrastructure/models/product-models';
+import { createProductController } from '../controllers/products/create-product-controller';
 
 const productRouter = Router();
 
 productRouter.get('/', async (_req, res) => {
-  const products = await Product.find();
+  const products = await ProductModel.find();
   res.json({ content: products });
 });
 
 productRouter.get('/:productId', async (req, res) => {
   const { productId } = req.params;
 
-  const product = await Product.findById(productId);
+  const product = await ProductModel.findById(productId);
 
   if (!product) {
     return res.status(404).json({ error: 'Product Not Found' });
@@ -21,29 +22,13 @@ productRouter.get('/:productId', async (req, res) => {
   return res.json({ content: product });
 });
 
-productRouter.post('/', async (req, res) => {
-  const { name, description } = req.body;
-
-  if (!name || !description) {
-    res.status(400).json({
-      message: 'name and description have to be dedfined',
-    });
-  }
-
-  const newProduct = new Product({
-    name,
-    description,
-  });
-  const productDb = await newProduct.save();
-
-  return res.status(201).json({ content: productDb });
-});
+productRouter.post('/', createProductController);
 
 productRouter.patch('/:productId', async (req, res) => {
   const { productId } = req.params;
   const { name, description } = req.body;
 
-  const updatedProduct = await Product.findByIdAndUpdate(
+  const updatedProduct = await ProductModel.findByIdAndUpdate(
     productId,
     { name, description },
     { new: true }
@@ -59,7 +44,7 @@ productRouter.patch('/:productId', async (req, res) => {
 productRouter.delete('/:productId', async (req, res) => {
   const { productId } = req.params;
 
-  const deletedProduct = await Product.findByIdAndDelete(productId);
+  const deletedProduct = await ProductModel.findByIdAndDelete(productId);
 
   if (!deletedProduct) {
     return res.status(400).json({ message: 'Not found' });
