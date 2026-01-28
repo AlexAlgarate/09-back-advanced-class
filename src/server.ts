@@ -16,4 +16,4 @@ const executeApp = async (): Promise<void> => {
   }
 };
 
-executeApp();
+await executeApp();
