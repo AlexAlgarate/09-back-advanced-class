@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../../api';
+import { app } from '../../ui/api';
 import { faker } from '@faker-js/faker';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

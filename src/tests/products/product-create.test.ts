@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../../api';
+import { app } from '../../ui/api';
 
 describe('GET /products', () => {
   it('Given no name or description, should return a 400 error', async () => {
@@ -19,5 +19,6 @@ describe('GET /products', () => {
     expect(response.body).toMatchObject({
       content: { name: 'test', description: 'test' },
     });
+    expect(response.body.content.createdAt).toBeDefined();
   });
 });
