@@ -1,8 +1,8 @@
-import express from 'express';
+import { Router } from 'express';
 
 import { Product } from './product';
 
-const productRouter = express.Router();
+const productRouter = Router();
 
 productRouter.get('/', async (_req, res) => {
   const products = await Product.find();
