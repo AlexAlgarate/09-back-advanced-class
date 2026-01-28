@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../api';
+import { createRandomProduct } from './helpers';
 
 describe('GET /products/:productId', () => {
   const _ID_MONGO = '6979054b067bd17c70d31fbf';
@@ -11,10 +12,7 @@ describe('GET /products/:productId', () => {
     expect(response.body).toStrictEqual({ error: 'Product Not Found' });
   });
   it('Should return the requests product', async () => {
-    const product = await request(app).post('/products').send({
-      name: 'test',
-      description: 'test',
-    });
+    const product = await createRandomProduct();
 
     const productId = product.body.content._id;
 
@@ -23,8 +21,8 @@ describe('GET /products/:productId', () => {
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       content: {
-        name: 'test',
-        description: 'test',
+        name: product.body.content.name,
+        description: product.body.content.description,
         __v: 0,
       },
     });
@@ -39,14 +37,8 @@ describe('GET /products', () => {
   });
 
   it('Should return a list of products', async () => {
-    await request(app).post('/products').send({
-      name: 'test1',
-      description: 'test1',
-    });
-    await request(app).post('/products').send({
-      name: 'test2',
-      description: 'test2',
-    });
+    await createRandomProduct();
+    await createRandomProduct();
 
     const response = await request(app).get('/products').send();
 
