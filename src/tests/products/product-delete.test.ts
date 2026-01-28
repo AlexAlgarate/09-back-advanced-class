@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../api';
+import { createRandomProduct } from './helpers';
 
 describe('DELETE /products/:productId', () => {
   it('Should raise an error if product does not exist', async () => {
@@ -10,9 +11,7 @@ describe('DELETE /products/:productId', () => {
   });
 
   it('Should raise an error if product does not exist', async () => {
-    const product = await request(app)
-      .post('/products')
-      .send({ name: 'test', description: 'test' });
+    const product = await createRandomProduct();
 
     const productId = product.body.content._id;
 
