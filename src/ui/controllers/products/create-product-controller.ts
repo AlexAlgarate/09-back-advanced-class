@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateProductUseCase } from '../../../domain/use-cases/product/create-product-usecase';
-import { ProductMongodbRepository } from '../../../infrastructure/repositories/product-repository';
+import { ProductMongodbRepository } from '../../../infrastructure/repositories/product-mongo-repository';
 
 export const createProductController = async (request: Request, response: Response) => {
   // TODO fix
