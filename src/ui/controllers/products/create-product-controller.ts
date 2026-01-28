@@ -13,8 +13,13 @@ export const createProductController = async (request: Request, response: Respon
     });
   }
   // inyectamos el caso de uso con un repositorio
-  const productRepository = new ProductMongodbRepository();
-  const createProductUseCase = new CreateProductUseCase(productRepository);
+  const productMongodbRepository = new ProductMongodbRepository();
+  const createProductUseCase = new CreateProductUseCase(productMongodbRepository);
+
+  // Si mañana queremos cambiar a un sistema de guardado en memoria, con hacer este cambio
+  // sería más que suficiente.
+  // const productMemoryRepository = new ProductMemoryRepository();
+  // const createProductUseCase = new CreateProductUseCase(productMemoryRepository);
 
   // TODO fix
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
