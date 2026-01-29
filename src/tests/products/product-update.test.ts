@@ -9,11 +9,10 @@ describe('PATCH /products/:productId', () => {
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ message: 'Not found' });
   });
-
   it('Should return a updated product', async () => {
     const product = await createRandomProduct();
 
-    const productId = product.body.content._id;
+    const productId = product.body.content.id;
 
     const response = await request(app).patch(`/products/${productId}`).send({
       name: 'updated-name',
@@ -24,7 +23,6 @@ describe('PATCH /products/:productId', () => {
       content: {
         name: 'updated-name',
         description: product.body.content.description,
-        __v: 0,
       },
     });
   });
