@@ -8,13 +8,15 @@ export const deleteProductController = async (
   response: Response
 ): Promise<void> => {
   const { productId } = request.params;
-  try {
-    const productMongodbRepository = new ProductMongodbRepository();
-    const deleteProductUseCase = new DeleteProductUseCase(productMongodbRepository);
 
+  const productMongodbRepository = new ProductMongodbRepository();
+  const deleteProductUseCase = new DeleteProductUseCase(productMongodbRepository);
+
+  try {
     await deleteProductUseCase.execute(productId);
     response.json({ message: 'Product removed successfully' });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    response.status(400).json({ message: (error as Error).message });
+    response.status(400).json({ message: 'Product not found' });
   }
 };

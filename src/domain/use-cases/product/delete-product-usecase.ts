@@ -8,10 +8,10 @@ export class DeleteProductUseCase {
   }
 
   async execute(productId: string): Promise<void> {
-    if (!productId) {
-      throw new Error('Product id is required');
-    }
+    const isRemoved = await this.productRepository.removeById(productId);
 
-    await this.productRepository.deleteOne(productId);
+    if (!isRemoved) {
+      throw new Error('Product can not be removed');
+    }
   }
 }

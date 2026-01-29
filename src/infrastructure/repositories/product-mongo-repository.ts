@@ -59,11 +59,9 @@ export class ProductMongodbRepository implements ProductRepository {
     });
   }
 
-  async deleteOne(product_id: string): Promise<void> {
-    const mongoProduct = await ProductModel.findByIdAndDelete(product_id);
+  async removeById(productId: string): Promise<boolean> {
+    const deletedProduct = await ProductModel.findByIdAndDelete(productId);
 
-    if (!mongoProduct) {
-      throw new Error('Not found');
-    }
+    return !!deletedProduct;
   }
 }

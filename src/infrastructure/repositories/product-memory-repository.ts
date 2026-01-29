@@ -16,7 +16,7 @@ export class ProductMemoryRepository implements ProductRepository {
   updateOne(): Promise<Product> {
     throw new Error('Method not implemented.');
   }
-  deleteOne(): Promise<void> {
+  removeById(): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
 
