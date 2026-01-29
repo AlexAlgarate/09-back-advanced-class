@@ -9,16 +9,13 @@ export const updateProductController = async (
   const { productId } = request.params;
   const { name, description } = request.body;
 
-  try {
-    const productMongodbRepository = new ProductMongodbRepository();
-    const updateProductUseCase = new UpdateProductUseCase(productMongodbRepository);
+  const productMongodbRepository = new ProductMongodbRepository();
+  const updateProductUseCase = new UpdateProductUseCase(productMongodbRepository);
 
-    const updateProduct = await updateProductUseCase.execute({ id: productId, name, description });
+  const updateProduct = await updateProductUseCase.execute(productId, { name, description });
 
-    response.json({ content: updateProduct });
-  } catch (error) {
-    response.status(400).json({
-      message: (error as Error).message,
-    });
+  if (!updateProduct) {
+    response.status(400).json({ message: 'Not found' });
   }
+  response.json({ content: updateProduct });
 };

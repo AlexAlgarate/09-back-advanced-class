@@ -1,5 +1,6 @@
 import { Product } from '../../entities/Product';
 import { ProductRepository } from '../../repositories/ProductRepository';
+import { ProductUpdateQuery } from '../../types/product/ProductUpdateQuery';
 
 export class UpdateProductUseCase {
   private readonly productRepository: ProductRepository;
@@ -8,16 +9,9 @@ export class UpdateProductUseCase {
     this.productRepository = productRepository;
   }
 
-  async execute({
-    id,
-    name,
-    description,
-  }: {
-    id: string;
-    name?: string;
-    description?: string;
-  }): Promise<Product> {
-    const updateProduct = await this.productRepository.updateOne({ id, name, description });
-    return updateProduct;
+  async execute(productId: string, query: ProductUpdateQuery): Promise<Product | null> {
+    const updatedProduct = await this.productRepository.updateOne(productId, query);
+
+    return updatedProduct;
   }
 }

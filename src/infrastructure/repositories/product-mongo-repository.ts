@@ -1,5 +1,6 @@
 import { Product } from '../../domain/entities/Product';
 import { ProductRepository } from '../../domain/repositories/ProductRepository';
+import { ProductUpdateQuery } from '../../domain/types/product/ProductUpdateQuery';
 import { ProductModel } from '../models/product-models';
 
 export class ProductMongodbRepository implements ProductRepository {
@@ -45,31 +46,16 @@ export class ProductMongodbRepository implements ProductRepository {
     });
   }
 
-  async updateOne({
-    id,
-    name,
-    description,
-  }: {
-    id: string;
-    name?: string;
-    description?: string;
-  }): Promise<Product> {
-    const updateData: Partial<{ name: string; description: string }> = {};
+  async updateOne(productId: string, query: ProductUpdateQuery): Promise<Product | null> {
+    const updateData = await ProductModel.findByIdAndUpdate(productId, query, { new: true });
 
-    if (name !== undefined) updateData.name = name;
-    if (description !== undefined) updateData.description = description;
-
-    const mongoProduct = await ProductModel.findByIdAndUpdate(id, updateData, { new: true });
-
-    if (!mongoProduct) {
-      throw new Error('Not found');
-    }
+    if (!updateData) return null;
 
     return new Product({
-      id: mongoProduct._id.toString(),
-      name: mongoProduct.name,
-      description: mongoProduct.description,
-      createdAt: mongoProduct.createdAt,
+      id: updateData._id.toString(),
+      name: updateData.name,
+      description: updateData.description,
+      createdAt: updateData.createdAt,
     });
   }
 
