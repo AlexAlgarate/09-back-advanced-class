@@ -12,7 +12,7 @@ describe('PATCH /products/:productId', () => {
   it('Should return a updated product', async () => {
     const product = await createRandomProduct();
 
-    const productId = product.body.content.id;
+    const productId = (product.body as { content: { id: string } }).content.id;
 
     const response = await request(app).patch(`/products/${productId}`).send({
       name: 'updated-name',
@@ -22,7 +22,7 @@ describe('PATCH /products/:productId', () => {
     expect(response.body).toMatchObject({
       content: {
         name: 'updated-name',
-        description: product.body.content.description,
+        description: (product.body as { content: { description: string } }).content.description,
       },
     });
   });

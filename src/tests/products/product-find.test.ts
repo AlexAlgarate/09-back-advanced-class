@@ -32,7 +32,7 @@ describe('GET /products', () => {
   it('Should return an empty array when there are no products', async () => {
     const response = await request(app).get('/products').send();
 
-    expect(response.body.content.length).toBe(0);
+    expect((response.body as { content: unknown[] }).content.length).toBe(0);
   });
 
   it('Should return a list of products', async () => {
@@ -41,6 +41,6 @@ describe('GET /products', () => {
 
     const response = await request(app).get('/products').send();
 
-    expect(response.body.content.length).toBe(2);
+    expect((response.body as { content: unknown[] }).content.length).toBe(2);
   });
 });

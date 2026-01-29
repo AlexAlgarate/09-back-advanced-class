@@ -2,13 +2,14 @@ import { Request, Response } from 'express';
 import { CreateProductUseCase } from '../../../domain/use-cases/product/create-product-usecase';
 import { ProductMongodbRepository } from '../../../infrastructure/repositories/product-mongo-repository';
 
-export const createProductController = async (request: Request, response: Response) => {
-  // TODO fix
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+export const createProductController = async (
+  request: Request<{ productId: string }, unknown, { name?: string; description?: string }>,
+  response: Response
+): Promise<Response> => {
   const { name, description } = request.body;
 
-  if (!name || !description) {
-    response.status(400).json({
+  if (typeof name !== 'string' || typeof description !== 'string') {
+    return response.status(400).json({
       message: 'name and description have to be dedfined',
     });
   }
@@ -21,8 +22,6 @@ export const createProductController = async (request: Request, response: Respon
   // const productMemoryRepository = new ProductMemoryRepository();
   // const createProductUseCase = new CreateProductUseCase(productMemoryRepository);
 
-  // TODO fix
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const createdProduct = await createProductUseCase.execute({ name, description });
 
   return response.status(201).json({ content: createdProduct });

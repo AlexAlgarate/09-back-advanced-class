@@ -19,6 +19,6 @@ describe('GET /products', () => {
     expect(response.body).toMatchObject({
       content: { name: 'test', description: 'test' },
     });
-    expect(response.body.content.createdAt).toBeDefined();
+    expect((response.body as { content: { createdAt: Date } }).content.createdAt).toBeDefined();
   });
 });
