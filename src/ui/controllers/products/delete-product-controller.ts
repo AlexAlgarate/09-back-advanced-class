@@ -11,7 +11,7 @@ export const deleteProductController = async (
     const productMongodbRepository = new ProductMongodbRepository();
     const deleteProductUseCase = new DeleteProductUseCase(productMongodbRepository);
 
-    await deleteProductUseCase.execute({ id: productId });
+    await deleteProductUseCase.execute(productId);
     response.json({ message: 'Product removed successfully' });
   } catch (error) {
     response.status(400).json({ message: (error as Error).message });

@@ -7,11 +7,11 @@ export class DeleteProductUseCase {
     this.productRepository = productRepository;
   }
 
-  async execute({ id }: { id: string }): Promise<void> {
-    if (!id) {
+  async execute(productId: string): Promise<void> {
+    if (!productId) {
       throw new Error('Product id is required');
     }
 
-    await this.productRepository.deleteOne({ id });
+    await this.productRepository.deleteOne(productId);
   }
 }

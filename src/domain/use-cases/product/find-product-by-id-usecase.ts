@@ -8,8 +8,8 @@ export class FindProductUseCase {
     this.productRepository = productRepository;
   }
 
-  async execute({ id }: { id: string }): Promise<Product | null> {
-    const product = await this.productRepository.findById({ id });
+  async execute(productId: string): Promise<Product | null> {
+    const product = await this.productRepository.findById(productId);
 
     return product;
   }

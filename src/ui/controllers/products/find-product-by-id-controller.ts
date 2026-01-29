@@ -16,7 +16,7 @@ export const findProductController = async (
   const productMongodbRepository = new ProductMongodbRepository();
   const findProductUseCase = new FindProductUseCase(productMongodbRepository);
 
-  const product = await findProductUseCase.execute({ id: productId });
+  const product = await findProductUseCase.execute(productId);
 
   if (!product) {
     response.status(404).json({ error: 'Product Not Found' });

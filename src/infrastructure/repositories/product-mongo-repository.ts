@@ -33,8 +33,8 @@ export class ProductMongodbRepository implements ProductRepository {
     );
   }
 
-  async findById({ id }: { id: string }): Promise<Product | null> {
-    const mongoProduct = await ProductModel.findById(id);
+  async findById(product_id: string): Promise<Product | null> {
+    const mongoProduct = await ProductModel.findById(product_id);
 
     if (!mongoProduct) return null;
 
@@ -59,8 +59,8 @@ export class ProductMongodbRepository implements ProductRepository {
     });
   }
 
-  async deleteOne({ id }: { id: string }): Promise<void> {
-    const mongoProduct = await ProductModel.findByIdAndDelete(id);
+  async deleteOne(product_id: string): Promise<void> {
+    const mongoProduct = await ProductModel.findByIdAndDelete(product_id);
 
     if (!mongoProduct) {
       throw new Error('Not found');
