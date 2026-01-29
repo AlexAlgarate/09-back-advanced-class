@@ -74,4 +74,12 @@ export class ProductMongodbRepository implements ProductRepository {
       createdAt: mongoProduct.createdAt,
     });
   }
+
+  async deleteOne({ id }: { id: string }): Promise<void> {
+    const mongoProduct = await ProductModel.findByIdAndDelete(id);
+
+    if (!mongoProduct) {
+      throw new Error('Not found');
+    }
+  }
 }

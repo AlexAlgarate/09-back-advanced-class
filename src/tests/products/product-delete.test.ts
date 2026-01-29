@@ -13,7 +13,7 @@ describe('DELETE /products/:productId', () => {
   it('Should raise an error if product does not exist', async () => {
     const product = await createRandomProduct();
 
-    const productId = product.body.content._id;
+    const productId = product.body.content.id;
 
     const response = await request(app).delete(`/products/${productId}`).send();
 

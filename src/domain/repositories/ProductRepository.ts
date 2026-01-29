@@ -13,4 +13,5 @@ export interface ProductRepository {
     name?: string;
     description?: string;
   }): Promise<Product>;
+  deleteOne({ id }: { id: string }): Promise<void>;
 }
