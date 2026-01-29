@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { createProductController } from '../controllers/products/create-product-controller';
 import { findProductsController } from '../controllers/products/find-products-controller';
-import { findProductController } from '../controllers/products/find-product-controller';
+import { findProductController } from '../controllers/products/find-product-by-id-controller';
 import { updateProductController } from '../controllers/products/update-product-controller';
 import { deleteProductController } from '../controllers/products/delete-product-controller';
 
