@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { ProductMongodbRepository } from '../../../infrastructure/repositories/product-mongo-repository';
-import { DeleteProductUseCase } from '../../../domain/use-cases/product/delete-product-usecase';
+
+import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
+import { DeleteProductUseCase } from '@domain/use-cases/product/delete-product-usecase';
 
 export const deleteProductController = async (
   request: Request<{ productId: string }>,

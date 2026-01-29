@@ -1,6 +1,7 @@
 import { Response, Request } from 'express';
-import { ProductMongodbRepository } from '../../../infrastructure/repositories/product-mongo-repository';
-import { UpdateProductUseCase } from '../../../domain/use-cases/product/update-product-usecase';
+
+import { UpdateProductUseCase } from '@domain/use-cases/product/update-product-usecase';
+import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
 
 export const updateProductController = async (
   request: Request<{ productId: string }, unknown, { name?: string; description?: string }>,

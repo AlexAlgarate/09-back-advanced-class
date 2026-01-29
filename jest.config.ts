@@ -8,6 +8,9 @@ const config: Config = {
   setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^@domain/(.*)$': '<rootDir>/src/domain/$1',
+    '^@infrastructure/(.*)$': '<rootDir>/src/infrastructure/$1',
+    '^@ui/(.*)$': '<rootDir>/src/ui/$1',
   },
   transform: {
     '^.+\\.tsx?$': [

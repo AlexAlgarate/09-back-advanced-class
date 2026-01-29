@@ -1,7 +1,7 @@
-import { Product } from '../../domain/entities/Product';
-import { ProductRepository } from '../../domain/repositories/ProductRepository';
-import { ProductUpdateQuery } from '../../domain/types/product/ProductUpdateQuery';
+import { ProductRepository } from '@domain/repositories/ProductRepository';
 import { ProductModel } from '../models/product-models';
+import { Product } from '@domain/entities/Product';
+import { ProductUpdateQuery } from '@domain/types/product/ProductUpdateQuery';
 
 export class ProductMongodbRepository implements ProductRepository {
   async createOne({ name, description }: { name: string; description: string }): Promise<Product> {

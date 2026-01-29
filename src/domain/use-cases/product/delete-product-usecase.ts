@@ -1,4 +1,4 @@
-import { ProductRepository } from '../../repositories/ProductRepository';
+import { ProductRepository } from '@domain/repositories/ProductRepository';
 
 export class DeleteProductUseCase {
   private readonly productRepository: ProductRepository;

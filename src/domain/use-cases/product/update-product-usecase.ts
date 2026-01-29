@@ -1,6 +1,6 @@
-import { Product } from '../../entities/Product';
-import { ProductRepository } from '../../repositories/ProductRepository';
-import { ProductUpdateQuery } from '../../types/product/ProductUpdateQuery';
+import { Product } from '@domain/entities/Product';
+import { ProductRepository } from '@domain/repositories/ProductRepository';
+import { ProductUpdateQuery } from '@domain/types/product/ProductUpdateQuery';
 
 export class UpdateProductUseCase {
   private readonly productRepository: ProductRepository;

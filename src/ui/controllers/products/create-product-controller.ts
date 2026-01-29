@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { CreateProductUseCase } from '../../../domain/use-cases/product/create-product-usecase';
-import { ProductMongodbRepository } from '../../../infrastructure/repositories/product-mongo-repository';
+
+import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
+import { CreateProductUseCase } from '@domain/use-cases/product/create-product-usecase';
 
 export const createProductController = async (
   request: Request<{ productId: string }, unknown, { name?: string; description?: string }>,
