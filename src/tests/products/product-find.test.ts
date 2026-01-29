@@ -2,7 +2,7 @@ import request from 'supertest';
 import { app } from '../../ui/api';
 import { createRandomProduct } from './helpers';
 
-describe('GET /products/:productId', () => {
+describe('GET /products/:productId - 404 cases', () => {
   const _ID_MONGO = '6979054b067bd17c70d31fbf';
 
   it('Should return a 404 if a product does not exist', async () => {
@@ -14,16 +14,15 @@ describe('GET /products/:productId', () => {
   it('Should return the requests product', async () => {
     const product = await createRandomProduct();
 
-    const productId = product.body.content._id;
+    const productId = (product.body as { content: { id: string } }).content.id;
 
     const response = await request(app).get(`/products/${productId}`).send();
 
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       content: {
-        name: product.body.content.name,
-        description: product.body.content.description,
-        __v: 0,
+        name: (product.body as { content: { name: string } }).content.name,
+        description: (product.body as { content: { description: string } }).content.description,
       },
     });
   });
