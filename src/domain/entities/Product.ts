@@ -1,8 +1,8 @@
 export class Product {
-  readonly name;
-  readonly description;
-  readonly id;
-  readonly createdAt;
+  readonly name: string;
+  readonly description: string;
+  readonly id: string;
+  readonly createdAt: Date;
 
   constructor({
     name,

@@ -3,22 +3,13 @@ import { Router } from 'express';
 import { ProductModel } from '../../infrastructure/models/product-models';
 import { createProductController } from '../controllers/products/create-product-controller';
 import { findProductsController } from '../controllers/products/find-products-controller';
+import { findProductController } from '../controllers/products/find-product-controller';
 
 const productRouter = Router();
 
 productRouter.get('/', findProductsController);
 
-productRouter.get('/:productId', async (req, res) => {
-  const { productId } = req.params;
-
-  const product = await ProductModel.findById(productId);
-
-  if (!product) {
-    return res.status(404).json({ error: 'Product Not Found' });
-  }
-
-  return res.json({ content: product });
-});
+productRouter.get('/:productId', findProductController);
 
 productRouter.post('/', createProductController);
 
