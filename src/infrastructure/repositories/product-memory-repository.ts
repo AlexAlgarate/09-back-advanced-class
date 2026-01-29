@@ -10,7 +10,7 @@ export class ProductMemoryRepository implements ProductRepository {
   findMany(): Promise<Product[]> {
     throw new Error('Method not implemented.');
   }
-  findOne(): Promise<Product> {
+  findById(): Promise<Product> {
     throw new Error('Method not implemented.');
   }
   updateOne(): Promise<Product> {

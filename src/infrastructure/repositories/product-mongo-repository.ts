@@ -32,12 +32,10 @@ export class ProductMongodbRepository implements ProductRepository {
     );
   }
 
-  async findOne({ id }: { id: string }): Promise<Product> {
+  async findById({ id }: { id: string }): Promise<Product | null> {
     const mongoProduct = await ProductModel.findById(id);
 
-    if (!mongoProduct) {
-      throw new Error(`Product with id ${id} not found`);
-    }
+    if (!mongoProduct) return null;
 
     return new Product({
       id: mongoProduct._id.toString(),
