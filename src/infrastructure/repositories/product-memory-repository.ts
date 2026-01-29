@@ -13,6 +13,12 @@ export class ProductMemoryRepository implements ProductRepository {
   findOne(): Promise<Product> {
     throw new Error('Method not implemented.');
   }
+  updateOne(): Promise<Product> {
+    throw new Error('Method not implemented.');
+  }
+  deleteOne(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 
   createOne({ name, description }: { name: string; description: string }): Promise<Product> {
     const product = new Product({
