@@ -13,15 +13,13 @@ export const findProductController = async (
     return;
   }
 
-  try {
-    const productMongodbRepository = new ProductMongodbRepository();
-    const findProductUseCase = new FindProductUseCase(productMongodbRepository);
+  const productMongodbRepository = new ProductMongodbRepository();
+  const findProductUseCase = new FindProductUseCase(productMongodbRepository);
 
-    const product = await findProductUseCase.execute({ id: productId });
+  const product = await findProductUseCase.execute({ id: productId });
 
-    response.json({ content: product });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {
+  if (!product) {
     response.status(404).json({ error: 'Product Not Found' });
   }
+  response.json({ content: product });
 };
