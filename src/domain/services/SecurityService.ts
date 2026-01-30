@@ -1,3 +1,3 @@
 export interface SecurityService {
-  hashPassword(password: string): string;
+  hashPassword(password: string): Promise<string>;
 }

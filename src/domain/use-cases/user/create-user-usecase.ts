@@ -20,7 +20,7 @@ export class CreateUserUseCase {
     }
     // 2º Ordenar que se hasheé la password
 
-    const hashedPassword = this.securityService.hashPassword(query.password);
+    const hashedPassword = await this.securityService.hashPassword(query.password);
     // 3º Crear el usuario
     const createdUser = await this.userRepository.createOne({
       email: query.email,
