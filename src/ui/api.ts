@@ -3,6 +3,17 @@ import productRouter from './routes/product-routes';
 import authenticationRouter from './routes/authentication-routes';
 export const app = express();
 
+// ! review this error TODO FIX
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+      };
+    }
+  }
+}
+
 // Middleware para decirle a Express que los body serán JSON (método POST)
 app.use(express.json());
 

@@ -1,36 +1,25 @@
 import { ProductRepository } from '@domain/repositories/ProductRepository';
-import { ProductModel } from '../models/product-models';
+import { ProductModel, ProductMongoDb } from '../models/product-models';
 import { Product } from '@domain/entities/Product';
 import { ProductUpdateQuery } from '@domain/types/product/ProductUpdateQuery';
+import { ProductCreationQuery } from '@domain/types/product/ProductCreationQuery';
 
 export class ProductMongodbRepository implements ProductRepository {
-  async createOne({ name, description }: { name: string; description: string }): Promise<Product> {
+  async createOne({ name, description, userId }: ProductCreationQuery): Promise<Product> {
     const newProduct = new ProductModel({
       name,
       description,
+      ownerId: userId,
     });
 
     const createdProduct = await newProduct.save();
-    return new Product({
-      id: createdProduct._id.toString(),
-      name: createdProduct.name,
-      description: createdProduct.description,
-      createdAt: createdProduct.createdAt,
-    });
+    return this.restoreProduct(createdProduct);
   }
 
   async findMany(): Promise<Product[]> {
     const mongoProducts = await ProductModel.find();
 
-    return mongoProducts.map(
-      mongoProduct =>
-        new Product({
-          id: mongoProduct._id.toString(),
-          name: mongoProduct.name,
-          description: mongoProduct.description,
-          createdAt: mongoProduct.createdAt,
-        })
-    );
+    return mongoProducts.map(mongoProduct => this.restoreProduct(mongoProduct));
   }
 
   async findById(product_id: string): Promise<Product | null> {
@@ -38,12 +27,7 @@ export class ProductMongodbRepository implements ProductRepository {
 
     if (!mongoProduct) return null;
 
-    return new Product({
-      id: mongoProduct._id.toString(),
-      name: mongoProduct.name,
-      description: mongoProduct.description,
-      createdAt: mongoProduct.createdAt,
-    });
+    return this.restoreProduct(mongoProduct);
   }
 
   async updateOne(productId: string, query: ProductUpdateQuery): Promise<Product | null> {
@@ -51,17 +35,22 @@ export class ProductMongodbRepository implements ProductRepository {
 
     if (!updateData) return null;
 
-    return new Product({
-      id: updateData._id.toString(),
-      name: updateData.name,
-      description: updateData.description,
-      createdAt: updateData.createdAt,
-    });
+    return this.restoreProduct(updateData);
   }
 
   async removeById(productId: string): Promise<boolean> {
     const deletedProduct = await ProductModel.findByIdAndDelete(productId);
 
     return !!deletedProduct;
+  }
+
+  private restoreProduct(productDb: ProductMongoDb): Product {
+    return new Product({
+      id: productDb._id.toString(),
+      name: productDb.name,
+      description: productDb.description,
+      createdAt: productDb.createdAt,
+      ownerId: productDb.ownerId.toString(),
+    });
   }
 }

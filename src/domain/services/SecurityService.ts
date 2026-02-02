@@ -4,4 +4,5 @@ export interface SecurityService {
   hashPassword(password: string): Promise<string>;
   generateJWT(user: User): string;
   comparePasswords(incomingPassword: string, userPassword: string): Promise<boolean>;
+  veryfyJWT(token: string): { userId: string };
 }

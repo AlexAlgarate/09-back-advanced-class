@@ -1,6 +1,15 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
-const ProductSchema = new mongoose.Schema(
+export interface ProductMongoDb {
+  name: string;
+  description: string;
+  ownerId: Types.ObjectId;
+  _id: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const ProductSchema = new mongoose.Schema<ProductMongoDb>(
   {
     name: {
       type: String,
@@ -9,6 +18,11 @@ const ProductSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
+    },
+    ownerId: {
+      required: true,
+      type: Types.ObjectId,
+      ref: 'User',
     },
   },
   {

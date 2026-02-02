@@ -14,6 +14,7 @@ export const createProductController = async (
       message: 'name and description have to be dedfined',
     });
   }
+
   // inyectamos el caso de uso con un repositorio
   const productMongodbRepository = new ProductMongodbRepository();
   const createProductUseCase = new CreateProductUseCase(productMongodbRepository);
@@ -23,7 +24,11 @@ export const createProductController = async (
   // const productMemoryRepository = new ProductMemoryRepository();
   // const createProductUseCase = new CreateProductUseCase(productMemoryRepository);
 
-  const createdProduct = await createProductUseCase.execute({ name, description });
+  const createdProduct = await createProductUseCase.execute({
+    name,
+    description,
+    userId: request.user?.id ?? '',
+  });
 
   return response.status(201).json({ content: createdProduct });
 };

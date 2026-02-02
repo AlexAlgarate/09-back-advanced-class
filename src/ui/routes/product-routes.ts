@@ -5,6 +5,7 @@ import { findProductsController } from '../controllers/products/find-products-co
 import { findProductController } from '../controllers/products/find-product-by-id-controller';
 import { updateProductController } from '../controllers/products/update-product-controller';
 import { deleteProductController } from '../controllers/products/delete-product-controller';
+import { authenticationMiddleware } from '@ui/middlewares/authentication-middleware';
 
 const productRouter = Router();
 
@@ -12,7 +13,7 @@ productRouter.get('/', findProductsController);
 
 productRouter.get('/:productId', findProductController);
 
-productRouter.post('/', createProductController);
+productRouter.post('/', [authenticationMiddleware], createProductController);
 
 productRouter.patch('/:productId', updateProductController);
 
