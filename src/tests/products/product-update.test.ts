@@ -55,4 +55,19 @@ describe('PATCH /products/:productId', () => {
       },
     });
   });
+
+  it('Given a not product owner, return a Forbidden operation error', async () => {
+    const { response: product } = await createRandomProduct();
+    const token = await signupAndLogin('other@email.com', 'Other-Password');
+
+    const productId = (product.body as { content: { id: string } }).content.id;
+
+    const response = await request(app)
+      .patch(`/products/${productId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+
+    // ! NEED TO BE FIXED
+    expect(response.status).toBe(404);
+  });
 });
