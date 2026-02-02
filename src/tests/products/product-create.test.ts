@@ -2,6 +2,25 @@ import request from 'supertest';
 import { app } from '../../ui/api';
 
 describe('GET /products', () => {
+  it('Given no authorization header, endpoint should return a 401 status code', async () => {
+    const response = await request(app)
+      .post('/products')
+      .send({ name: 'test', description: 'test' });
+
+    expect(response.status).toBe(401);
+  });
+
+  it('Given an invalid token, endpoint should return a 401 status code', async () => {
+    const invalidToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30';
+    const response = await request(app)
+      .post('/products')
+      .set('Authorization', invalidToken)
+      .send({ name: 'test', description: 'test' });
+
+    expect(response.status).toBe(401);
+  });
+
   it('Given no name or description, should return a 400 error', async () => {
     const productError = { name: 'test-error' };
 
