@@ -13,7 +13,7 @@ export const deleteProductController = async (
   const deleteProductUseCase = new DeleteProductUseCase(productMongodbRepository);
 
   try {
-    await deleteProductUseCase.execute(productId);
+    await deleteProductUseCase.execute(productId, request.user?.id as string);
     response.json({ message: 'Product removed successfully' });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
