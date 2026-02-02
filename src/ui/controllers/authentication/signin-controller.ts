@@ -1,9 +1,9 @@
-import { CreateUserUseCase } from '@domain/use-cases/user/create-user-usecase';
+import { Request, Response } from 'express';
 import { UserMongoRepository } from '@infrastructure/repositories/user-mongo-repository';
 import { SecurityBcryptService } from '@infrastructure/services/security-bcrypt-service';
-import { Request, Response } from 'express';
+import { LoginUserUseCase } from '@domain/use-cases/user/login-user-usecase';
 
-export const signupController = async (request: Request, response: Response): Promise<void> => {
+export const signinController = async (request: Request, response: Response): Promise<void> => {
   // !
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { email, password } = request.body;
@@ -16,19 +16,18 @@ export const signupController = async (request: Request, response: Response): Pr
   const userMongoRepository = new UserMongoRepository();
   const securityBcryptService = new SecurityBcryptService();
 
-  const createUserUseCase = new CreateUserUseCase(userMongoRepository, securityBcryptService);
+  const loginUserUseCase = new LoginUserUseCase(userMongoRepository, securityBcryptService);
 
   try {
-    await createUserUseCase.execute({
+    const { token } = await loginUserUseCase.execute({
       email: email as string,
       password: password as string,
     });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    response.json({ content: token });
   } catch (error) {
-    response.status(409).json({
-      content: 'The user already exists',
+    response.status(400).json({
+      content: 'Login error',
+      error,
     });
   }
-
-  response.status(201).json({ content: 'User created successfully' });
 };
