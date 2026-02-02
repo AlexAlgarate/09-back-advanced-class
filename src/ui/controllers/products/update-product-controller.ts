@@ -13,10 +13,15 @@ export const updateProductController = async (
   const productMongodbRepository = new ProductMongodbRepository();
   const updateProductUseCase = new UpdateProductUseCase(productMongodbRepository);
 
-  const updateProduct = await updateProductUseCase.execute(productId, { name, description });
-
-  if (!updateProduct) {
+  try {
+    const updateProduct = await updateProductUseCase.execute(
+      productId,
+      { name, description },
+      request.user?.id as string // !
+    );
+    response.json({ content: updateProduct });
+  } catch (error) {
+    // !
     response.status(400).json({ message: 'Not found' });
   }
-  response.json({ content: updateProduct });
 };

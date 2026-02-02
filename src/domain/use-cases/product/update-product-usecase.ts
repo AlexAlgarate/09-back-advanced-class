@@ -9,7 +9,19 @@ export class UpdateProductUseCase {
     this.productRepository = productRepository;
   }
 
-  async execute(productId: string, query: ProductUpdateQuery): Promise<Product | null> {
+  async execute(
+    productId: string,
+    query: ProductUpdateQuery,
+    userId: string
+  ): Promise<Product | null> {
+    const productToUpdate = await this.productRepository.findById(productId);
+
+    if (!productToUpdate) throw new Error('Product not found');
+
+    if (userId !== productToUpdate.ownerId) {
+      throw new Error('Forbidden operation');
+    }
+
     const updatedProduct = await this.productRepository.updateOne(productId, query);
 
     return updatedProduct;

@@ -15,7 +15,7 @@ productRouter.get('/:productId', findProductController);
 
 productRouter.post('/', [authenticationMiddleware], createProductController);
 
-productRouter.patch('/:productId', updateProductController);
+productRouter.patch('/:productId', [authenticationMiddleware], updateProductController);
 
 productRouter.delete('/:productId', [authenticationMiddleware], deleteProductController);
 
