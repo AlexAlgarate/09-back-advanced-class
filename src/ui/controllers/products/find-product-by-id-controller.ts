@@ -1,18 +1,14 @@
 import { Request, Response } from 'express';
-import * as z from 'zod';
 
 import { FindProductUseCase } from '@domain/use-cases/product/find-product-by-id-usecase';
 import { ProductFactory } from '@ui/factories/product-factory';
-
-const findProductValidator = z.object({
-  productId: z.string(),
-});
+import { productIdParamsSchema } from '@ui/validators/product-validators';
 
 export const findProductController = async (
   request: Request,
   response: Response
 ): Promise<void> => {
-  const { productId } = findProductValidator.parse(request.params);
+  const { productId } = productIdParamsSchema.parse(request.params);
 
   const productRepository = ProductFactory.createRepository();
   const findProductUseCase = new FindProductUseCase(productRepository);
