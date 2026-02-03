@@ -24,7 +24,7 @@ export const authenticationMiddleware = (
   } catch (error) {
     response
       .status(401)
-      .json({ message: 'Token not available. User not authorizated to use the platform.', error });
+      .json({ message: 'Token not available. User not authorizated to use the platform.' });
     return;
   }
 
