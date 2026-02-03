@@ -1,5 +1,6 @@
 import { UserRepository } from '@domain/repositories/UserRepository';
 import { SecurityService } from '@domain/services/SecurityService';
+import { EntityNotFoundError } from '@domain/types/errors';
 
 export class LoginUserUseCase {
   private readonly userRepository: UserRepository;
@@ -16,7 +17,7 @@ export class LoginUserUseCase {
     const existingUser = await this.userRepository.findByEmail(email);
 
     if (!existingUser) {
-      throw new Error('User does not exist');
+      throw new EntityNotFoundError('User', email);
     }
 
     // comparar las contraseñas

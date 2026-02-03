@@ -1,5 +1,6 @@
 import { Product } from '@domain/entities/Product';
 import { ProductRepository } from '@domain/repositories/ProductRepository';
+import { EntityNotFoundError, ForbiddenOperation } from '@domain/types/errors';
 import { ProductUpdateQuery } from '@domain/types/product/ProductUpdateQuery';
 
 export class UpdateProductUseCase {
@@ -16,10 +17,10 @@ export class UpdateProductUseCase {
   ): Promise<Product | null> {
     const productToUpdate = await this.productRepository.findById(productId);
 
-    if (!productToUpdate) throw new Error('Product not found');
+    if (!productToUpdate) throw new EntityNotFoundError('Product', productId);
 
     if (userId !== productToUpdate.ownerId) {
-      throw new Error('Forbidden operation');
+      throw new ForbiddenOperation('Only owner of the product can update this product');
     }
 
     const updatedProduct = await this.productRepository.updateOne(productId, query);

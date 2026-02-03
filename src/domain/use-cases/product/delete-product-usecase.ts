@@ -1,5 +1,6 @@
 import { Product } from '@domain/entities/Product';
 import { ProductRepository } from '@domain/repositories/ProductRepository';
+import { ForbiddenOperation } from '@domain/types/errors';
 
 export class DeleteProductUseCase {
   private readonly productRepository: ProductRepository;
@@ -35,7 +36,7 @@ export class DeleteProductUseCase {
 
   private ensureUserIsOwner(userId: string, ownerId: string): void {
     if (userId !== ownerId) {
-      throw new Error('Forbidden operation');
+      throw new ForbiddenOperation('Forbidden operation');
     }
   }
 }

@@ -1,6 +1,7 @@
 import { User } from '@domain/entities/User';
 import { UserRepository } from '@domain/repositories/UserRepository';
 import { SecurityService } from '@domain/services/SecurityService';
+import { BusinessConflictError } from '@domain/types/errors';
 import { UserCreationQuery } from '@domain/types/user/UserCreationQuery';
 
 export class CreateUserUseCase {
@@ -16,7 +17,7 @@ export class CreateUserUseCase {
     const user = await this.userRepository.findByEmail(query.email);
 
     if (user) {
-      throw new Error('The user already exists');
+      throw new BusinessConflictError('The user already exists');
     }
     // 2º Ordenar que se hasheé la password
 
