@@ -12,7 +12,7 @@ describe('GET /products/:productId - 404 cases', () => {
     expect(response.body).toStrictEqual({ error: 'Product Not Found' });
   });
   it('Should return the requests product', async () => {
-    const product = await createRandomProduct();
+    const { newRandomProduct: product } = await createRandomProduct();
 
     const productId = (product.body as { content: { id: string } }).content.id;
 

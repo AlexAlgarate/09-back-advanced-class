@@ -1,13 +1,23 @@
 import { Request, Response } from 'express';
-
+import * as z from 'zod';
 import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
 import { CreateProductUseCase } from '@domain/use-cases/product/create-product-usecase';
 
+const creationProductBodyValidator = z.object({
+  name: z.string().min(3).optional(),
+  description: z.string().min(3).max(150).optional(),
+});
+
+const userRequestValidator = z.object({
+  id: z.string(),
+});
+
 export const createProductController = async (
-  request: Request<{ productId: string }, unknown, { name?: string; description?: string }>,
+  request: Request,
   response: Response
 ): Promise<Response> => {
-  const { name, description } = request.body;
+  const { name, description } = creationProductBodyValidator.parse(request.body);
+  const { id: userId } = userRequestValidator.parse(request.user);
 
   if (typeof name !== 'string' || typeof description !== 'string') {
     return response.status(400).json({
@@ -15,7 +25,6 @@ export const createProductController = async (
     });
   }
 
-  // inyectamos el caso de uso con un repositorio
   const productMongodbRepository = new ProductMongodbRepository();
   const createProductUseCase = new CreateProductUseCase(productMongodbRepository);
 
@@ -27,7 +36,7 @@ export const createProductController = async (
   const createdProduct = await createProductUseCase.execute({
     name,
     description,
-    userId: request.user?.id ?? '',
+    userId: userId,
   });
 
   return response.status(201).json({ content: createdProduct });
