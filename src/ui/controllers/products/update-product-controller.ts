@@ -16,6 +16,7 @@ const updateProductBodyValidator = z.object({
 const userRequestValidator = z.object({
   id: z.string(),
 });
+
 export const updateProductController = async (
   request: Request,
   response: Response
@@ -36,6 +37,6 @@ export const updateProductController = async (
     response.json({ content: updateProduct });
   } catch (error) {
     // !
-    response.status(400).json({ message: 'Not found' });
+    response.status(404).json({ message: 'Product not found' });
   }
 };

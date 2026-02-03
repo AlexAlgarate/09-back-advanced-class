@@ -23,7 +23,7 @@ describe('PATCH /products/:productId', () => {
     expect(response.status).toBe(401);
   });
 
-  it('Should return a 400 if product does not exist', async () => {
+  it('GIven a non existing product, return a 404 status code', async () => {
     const token = await signupAndLogin();
 
     const response = await request(app)
@@ -31,14 +31,14 @@ describe('PATCH /products/:productId', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({});
 
-    expect(response.status).toBe(400);
-    expect(response.body).toStrictEqual({ message: 'Not found' });
+    expect(response.status).toBe(404);
+    expect(response.body).toStrictEqual({ message: 'Product not found' });
   });
 
-  it('Should return a updated product', async () => {
-    const { response: product, token } = await createRandomProduct();
+  it('Given an existing product, return 200 status code and updated product', async () => {
+    const { newRandomProduct, token } = await createRandomProduct();
 
-    const productId = (product.body as { content: { id: string } }).content.id;
+    const productId = (newRandomProduct.body as { content: { id: string } }).content.id;
 
     const response = await request(app)
       .patch(`/products/${productId}`)
@@ -51,23 +51,25 @@ describe('PATCH /products/:productId', () => {
     expect(response.body).toMatchObject({
       content: {
         name: 'updated-name',
-        description: (product.body as { content: { description: string } }).content.description,
+        description: (newRandomProduct.body as { content: { description: string } }).content
+          .description,
       },
     });
   });
 
-  it('Given a not product owner, return a Forbidden operation error', async () => {
-    const { response: product } = await createRandomProduct();
+  it('Given a user that is not the product owner, return a Forbidden operation error', async () => {
+    const { newRandomProduct } = await createRandomProduct();
     const token = await signupAndLogin('other@email.com', 'Other-Password');
 
-    const productId = (product.body as { content: { id: string } }).content.id;
+    const productId = (newRandomProduct.body as { content: { id: string } }).content.id;
 
     const response = await request(app)
       .patch(`/products/${productId}`)
       .set('Authorization', `Bearer ${token}`)
-      .send();
+      .send({});
 
-    // ! NEED TO BE FIXED
+    // TODO: cambiar a 403
     expect(response.status).toBe(404);
+    expect(response.body).toStrictEqual({ message: 'Product not found' });
   });
 });
