@@ -18,8 +18,6 @@ export class SecurityBcryptService implements SecurityService {
     return isMatch;
   }
   generateJWT(user: User): string {
-    // ! FIX TODO
-    // eslint-disable-next-line import/no-named-as-default-member
     const token = jwt.sign(
       { userId: user.id },
       // clave secreta que tiene que ir en una variable de entorno

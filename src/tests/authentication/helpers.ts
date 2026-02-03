@@ -1,5 +1,10 @@
 import { app } from '@ui/api';
 import request from 'supertest';
+import * as z from 'zod';
+
+const loginResponseSchema = z.object({
+  content: z.string(),
+});
 
 export const signupAndLogin = async (
   email: string = 'example@example.com',
@@ -9,5 +14,6 @@ export const signupAndLogin = async (
 
   const loginResponse = await request(app).post('/authentication/signin').send({ email, password });
 
-  return loginResponse.body.content as string;
+  const validateResponse = loginResponseSchema.parse(loginResponse.body);
+  return validateResponse.content;
 };
