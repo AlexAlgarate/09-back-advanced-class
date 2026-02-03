@@ -1,27 +1,20 @@
 import { Request, Response } from 'express';
-import { UserMongoRepository } from '@infrastructure/repositories/user-mongo-repository';
-import { SecurityBcryptService } from '@infrastructure/services/security-bcrypt-service';
+
 import { LoginUserUseCase } from '@domain/use-cases/user/login-user-usecase';
+import { authenticationBodySchema } from '@ui/validators/authentication-validators';
+import { AuthenticationFactory } from '@ui/factories/authentication-factory';
 
 export const signinController = async (request: Request, response: Response): Promise<void> => {
-  // !
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { email, password } = request.body;
-
-  if (!email || !password) {
-    response.status(400).json({
-      content: 'email and description have to be dedfined',
-    });
-  }
-  const userMongoRepository = new UserMongoRepository();
-  const securityBcryptService = new SecurityBcryptService();
-
-  const loginUserUseCase = new LoginUserUseCase(userMongoRepository, securityBcryptService);
-
   try {
+    const { email, password } = authenticationBodySchema.parse(request.body);
+
+    const { userRepository, securityService } = AuthenticationFactory.createDependencies();
+
+    const loginUserUseCase = new LoginUserUseCase(userRepository, securityService);
+
     const { token } = await loginUserUseCase.execute({
-      email: email as string,
-      password: password as string,
+      email: email,
+      password: password,
     });
     response.json({ content: token });
   } catch (error) {

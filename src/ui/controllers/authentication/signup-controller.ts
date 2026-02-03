@@ -1,34 +1,30 @@
-import { CreateUserUseCase } from '@domain/use-cases/user/create-user-usecase';
-import { UserMongoRepository } from '@infrastructure/repositories/user-mongo-repository';
-import { SecurityBcryptService } from '@infrastructure/services/security-bcrypt-service';
 import { Request, Response } from 'express';
 
+import { CreateUserUseCase } from '@domain/use-cases/user/create-user-usecase';
+import { authenticationBodySchema } from '@ui/validators/authentication-validators';
+import { AuthenticationFactory } from '@ui/factories/authentication-factory';
+import { ZodError } from 'zod';
+
 export const signupController = async (request: Request, response: Response): Promise<void> => {
-  // !
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { email, password } = request.body;
-
-  if (!email || !password) {
-    response.status(400).json({
-      content: 'email and description have to be dedfined',
-    });
-  }
-  const userMongoRepository = new UserMongoRepository();
-  const securityBcryptService = new SecurityBcryptService();
-
-  const createUserUseCase = new CreateUserUseCase(userMongoRepository, securityBcryptService);
-
   try {
+    const { email, password } = authenticationBodySchema.parse(request.body);
+
+    const { userRepository, securityService } = AuthenticationFactory.createDependencies();
+
+    const createUserUseCase = new CreateUserUseCase(userRepository, securityService);
+
     await createUserUseCase.execute({
-      email: email as string,
-      password: password as string,
+      email: email,
+      password: password,
     });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    response.status(201).json({ content: 'User created successfully' });
   } catch (error) {
+    if (error instanceof ZodError) {
+      response.status(400).json({ content: 'Validation Error', errors: error.message });
+      return;
+    }
     response.status(409).json({
       content: 'The user already exists',
     });
   }
-
-  response.status(201).json({ content: 'User created successfully' });
 };
