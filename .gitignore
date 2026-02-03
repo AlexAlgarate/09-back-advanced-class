@@ -1,3 +1,6 @@
 node_modules/
 dist/
 .env
+CODE_ANALYSIS.md
+IMPLEMENTATION_GUIDE.md
+repomix-output.xml
