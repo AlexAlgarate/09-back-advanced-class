@@ -1,14 +1,14 @@
 import { Response, Request } from 'express';
 
 import { FindProductsUseCase } from '@domain/use-cases/product/find-products-usecase';
-import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
+import { ProductFactory } from '@ui/factories/product-factory';
 
 export const findProductsController = async (
   _request: Request,
   response: Response
 ): Promise<void> => {
-  const productMongodbRepository = new ProductMongodbRepository();
-  const findProductUseCase = new FindProductsUseCase(productMongodbRepository);
+  const productRepository = ProductFactory.createRepository();
+  const findProductUseCase = new FindProductsUseCase(productRepository);
 
   const products = await findProductUseCase.execute();
 

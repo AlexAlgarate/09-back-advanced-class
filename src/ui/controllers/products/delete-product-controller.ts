@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import * as z from 'zod';
 
-import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
 import { DeleteProductUseCase } from '@domain/use-cases/product/delete-product-usecase';
+import { ProductFactory } from '@ui/factories/product-factory';
 
 const deleteProductParamsValidator = z.object({
   productId: z.string(),
@@ -19,8 +19,8 @@ export const deleteProductController = async (
   const { productId } = deleteProductParamsValidator.parse(request.params);
   const { id: userId } = userRequestValidator.parse(request.user);
 
-  const productMongodbRepository = new ProductMongodbRepository();
-  const deleteProductUseCase = new DeleteProductUseCase(productMongodbRepository);
+  const productRepository = ProductFactory.createRepository();
+  const deleteProductUseCase = new DeleteProductUseCase(productRepository);
 
   try {
     await deleteProductUseCase.execute(productId, userId);

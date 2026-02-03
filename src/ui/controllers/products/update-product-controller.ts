@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import * as z from 'zod';
 
 import { UpdateProductUseCase } from '@domain/use-cases/product/update-product-usecase';
-import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
+import { ProductFactory } from '@ui/factories/product-factory';
 
 const updateProductParamsValidator = z.object({
   productId: z.string(),
@@ -25,8 +25,8 @@ export const updateProductController = async (
   const { name, description } = updateProductBodyValidator.parse(request.body);
   const { id: userId } = userRequestValidator.parse(request.user);
 
-  const productMongodbRepository = new ProductMongodbRepository();
-  const updateProductUseCase = new UpdateProductUseCase(productMongodbRepository);
+  const productRepository = ProductFactory.createRepository();
+  const updateProductUseCase = new UpdateProductUseCase(productRepository);
 
   try {
     const updateProduct = await updateProductUseCase.execute(

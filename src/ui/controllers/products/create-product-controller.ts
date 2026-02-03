@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import * as z from 'zod';
-import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
+
 import { CreateProductUseCase } from '@domain/use-cases/product/create-product-usecase';
+import { ProductFactory } from '@ui/factories/product-factory';
 
 const creationProductBodyValidator = z.object({
   name: z.string().min(3).optional(),
@@ -25,8 +26,8 @@ export const createProductController = async (
     });
   }
 
-  const productMongodbRepository = new ProductMongodbRepository();
-  const createProductUseCase = new CreateProductUseCase(productMongodbRepository);
+  const productRepository = ProductFactory.createRepository();
+  const createProductUseCase = new CreateProductUseCase(productRepository);
 
   // Si mañana queremos cambiar a un sistema de guardado en memoria, con hacer este cambio
   // sería más que suficiente.

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
+import * as z from 'zod';
 
 import { FindProductUseCase } from '@domain/use-cases/product/find-product-by-id-usecase';
-import { ProductMongodbRepository } from '@infrastructure/repositories/product-mongo-repository';
-import * as z from 'zod';
+import { ProductFactory } from '@ui/factories/product-factory';
 
 const findProductValidator = z.object({
   productId: z.string(),
@@ -14,8 +14,8 @@ export const findProductController = async (
 ): Promise<void> => {
   const { productId } = findProductValidator.parse(request.params);
 
-  const productMongodbRepository = new ProductMongodbRepository();
-  const findProductUseCase = new FindProductUseCase(productMongodbRepository);
+  const productRepository = ProductFactory.createRepository();
+  const findProductUseCase = new FindProductUseCase(productRepository);
 
   const product = await findProductUseCase.execute(productId);
 
