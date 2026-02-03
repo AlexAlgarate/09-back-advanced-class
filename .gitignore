@@ -4,3 +4,5 @@ dist/
 CODE_ANALYSIS.md
 IMPLEMENTATION_GUIDE.md
 repomix-output.xml
+.env.production
+.env.staging

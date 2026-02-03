@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "tsx watch src/server.ts",
+    "start": "NODE_ENV=local tsx watch src/server.ts",
+    "start:staging": "NODE_ENV=staging tsx watch src/server.ts",
+    "start:prod": "NODE_ENV=production tsx watch src/server.ts",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src/**/*.ts",
     "build": "tsc",

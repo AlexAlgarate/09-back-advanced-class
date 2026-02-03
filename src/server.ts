@@ -1,13 +1,23 @@
 import mongoose from 'mongoose';
 import { startHTTPApi } from './ui/api';
+import { environmentService } from '@infrastructure/services/environment-service';
 
+const loadEnvironment = (): void => {
+  console.log('...loading environment');
+  environmentService.load();
+  console.log('environment loaded...');
+};
 const connectMongoDb = async (): Promise<void> => {
-  await mongoose.connect('mongodb://admin:admin123@localhost:27017/db?authSource=admin');
+  const { MONGO_USER, MONGO_PASSWORD, MONGO_HOST } = environmentService.get();
+  await mongoose.connect(
+    `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}/db?authSource=admin`
+  );
   console.log('Mongodb connected!');
 };
 
 const executeApp = async (): Promise<void> => {
   try {
+    loadEnvironment();
     await connectMongoDb();
     startHTTPApi();
   } catch (error) {

@@ -1,9 +1,11 @@
+import { environmentService } from '@infrastructure/services/environment-service';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
 let mongo: MongoMemoryServer;
 
 beforeAll(async () => {
+  environmentService.load();
   mongo = await MongoMemoryServer.create();
   const uri = mongo.getUri();
 
