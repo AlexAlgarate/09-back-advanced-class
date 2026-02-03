@@ -1,44 +1,41 @@
 import { Request, Response } from 'express';
-import * as z from 'zod';
 
 import { CreateProductUseCase } from '@domain/use-cases/product/create-product-usecase';
 import { ProductFactory } from '@ui/factories/product-factory';
-
-const creationProductBodyValidator = z.object({
-  name: z.string().min(3).optional(),
-  description: z.string().min(3).max(150).optional(),
-});
-
-const userRequestValidator = z.object({
-  id: z.string(),
-});
+import {
+  authenticatedUserSchema,
+  createProductBodySchema,
+} from '@ui/validators/product-validators';
+import { ZodError } from 'zod';
 
 export const createProductController = async (
   request: Request,
   response: Response
-): Promise<Response> => {
-  const { name, description } = creationProductBodyValidator.parse(request.body);
-  const { id: userId } = userRequestValidator.parse(request.user);
+): Promise<void> => {
+  try {
+    const { name, description } = createProductBodySchema.parse(request.body);
+    const { id: userId } = authenticatedUserSchema.parse(request.user);
 
-  if (typeof name !== 'string' || typeof description !== 'string') {
-    return response.status(400).json({
-      message: 'name and description have to be dedfined',
+    // Si mañana queremos cambiar a un sistema de guardado en memoria, con hacer este cambio
+    // sería más que suficiente.
+    // const productMemoryRepository = new ProductMemoryRepository();
+    // const createProductUseCase = new CreateProductUseCase(productMemoryRepository);
+    const productRepository = ProductFactory.createRepository();
+    // En el caso de querer cambiar el repo, habría que ir a la factoría en lugar de instanciarlo aquí
+    const createProductUseCase = new CreateProductUseCase(productRepository);
+
+    const createdProduct = await createProductUseCase.execute({
+      name,
+      description,
+      userId: userId,
     });
+
+    response.status(201).json({ content: createdProduct });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      response.status(400).json({ message: 'Name and description have to be defined' });
+    }
+
+    response.status(500).json({ message: 'Internal Server Error' });
   }
-
-  const productRepository = ProductFactory.createRepository();
-  const createProductUseCase = new CreateProductUseCase(productRepository);
-
-  // Si mañana queremos cambiar a un sistema de guardado en memoria, con hacer este cambio
-  // sería más que suficiente.
-  // const productMemoryRepository = new ProductMemoryRepository();
-  // const createProductUseCase = new CreateProductUseCase(productMemoryRepository);
-
-  const createdProduct = await createProductUseCase.execute({
-    name,
-    description,
-    userId: userId,
-  });
-
-  return response.status(201).json({ content: createdProduct });
 };
