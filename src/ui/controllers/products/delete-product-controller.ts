@@ -14,10 +14,6 @@ export const deleteProductController = async (
   const productRepository = ProductFactory.createRepository();
   const deleteProductUseCase = new DeleteProductUseCase(productRepository);
 
-  try {
-    await deleteProductUseCase.execute(productId, userId);
-    response.json({ message: 'Product removed successfully' });
-  } catch (error) {
-    response.status(404).json({ message: 'Product not found' });
-  }
+  await deleteProductUseCase.execute(productId, userId);
+  response.json({ message: 'Product removed successfully' });
 };

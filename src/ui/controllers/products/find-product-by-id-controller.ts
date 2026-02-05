@@ -15,8 +15,5 @@ export const findProductController = async (
 
   const product = await findProductUseCase.execute(productId);
 
-  if (!product) {
-    response.status(404).json({ error: 'Product Not Found' });
-  }
   response.json({ content: product });
 };

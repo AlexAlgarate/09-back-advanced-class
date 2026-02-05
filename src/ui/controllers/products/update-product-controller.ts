@@ -19,15 +19,10 @@ export const updateProductController = async (
   const productRepository = ProductFactory.createRepository();
   const updateProductUseCase = new UpdateProductUseCase(productRepository);
 
-  try {
-    const updateProduct = await updateProductUseCase.execute(
-      productId,
-      { name, description },
-      userId
-    );
-    response.json({ content: updateProduct });
-  } catch (error) {
-    // !
-    response.status(404).json({ message: 'Product not found' });
-  }
+  const updateProduct = await updateProductUseCase.execute(
+    productId,
+    { name, description },
+    userId
+  );
+  response.json({ content: updateProduct });
 };
