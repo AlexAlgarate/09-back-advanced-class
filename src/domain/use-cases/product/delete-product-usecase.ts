@@ -1,6 +1,6 @@
 import { Product } from '@domain/entities/Product';
 import { ProductRepository } from '@domain/repositories/ProductRepository';
-import { ForbiddenOperation } from '@domain/types/errors';
+import { EntityNotFoundError, ForbiddenOperation } from '@domain/types/errors';
 
 export class DeleteProductUseCase {
   private readonly productRepository: ProductRepository;
@@ -20,7 +20,7 @@ export class DeleteProductUseCase {
     const isRemoved = await this.productRepository.removeById(productId);
 
     if (!isRemoved) {
-      throw new Error('Product can not be removed');
+      throw new EntityNotFoundError('Product', productId);
     }
   }
 
@@ -28,7 +28,7 @@ export class DeleteProductUseCase {
     const product = await this.productRepository.findById(productId);
 
     if (!product) {
-      throw new Error('Product not found');
+      throw new EntityNotFoundError('Product', productId);
     }
 
     return product;
