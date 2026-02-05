@@ -3,6 +3,7 @@ import { ProductModel, ProductMongoDb } from '../models/product-models';
 import { Product } from '@domain/entities/Product';
 import { ProductUpdateQuery } from '@domain/types/product/ProductUpdateQuery';
 import { ProductCreationQuery } from '@domain/types/product/ProductCreationQuery';
+import { Pagination } from '@domain/types/pagination';
 
 export class ProductMongodbRepository implements ProductRepository {
   async createOne({ name, description, userId }: ProductCreationQuery): Promise<Product> {
@@ -16,8 +17,10 @@ export class ProductMongodbRepository implements ProductRepository {
     return this.restoreProduct(createdProduct);
   }
 
-  async findMany(): Promise<Product[]> {
-    const mongoProducts = await ProductModel.find();
+  async findMany({ page, limit }: Pagination): Promise<Product[]> {
+    const skip = (page - 1) * limit;
+
+    const mongoProducts = await ProductModel.find().skip(skip).limit(limit);
 
     return mongoProducts.map(mongoProduct => this.restoreProduct(mongoProduct));
   }
