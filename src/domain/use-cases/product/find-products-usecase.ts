@@ -1,6 +1,6 @@
 import { Product } from '@domain/entities/Product';
 import { ProductRepository } from '@domain/repositories/ProductRepository';
-import { Pagination } from '@domain/types/pagination';
+import { ProductFindQuery } from '@domain/types/product/ProductFindQuery';
 
 export class FindProductsUseCase {
   private readonly productRepository: ProductRepository;
@@ -9,8 +9,8 @@ export class FindProductsUseCase {
     this.productRepository = productRepository;
   }
 
-  async execute({ page, limit }: Pagination): Promise<Product[]> {
-    const products = await this.productRepository.findMany({ page, limit });
+  async execute(query: ProductFindQuery): Promise<Product[]> {
+    const products = await this.productRepository.findMany({ ...query });
 
     return products;
   }

@@ -6,18 +6,19 @@ import { ProductFactory } from '@ui/factories/product-factory';
 const findProductsValidator = z.object({
   page: z.coerce.number(),
   limit: z.coerce.number().max(100),
+  search: z.string().optional(),
 });
 
 export const findProductsController = async (
   request: Request,
   response: Response
 ): Promise<void> => {
-  const { page, limit } = findProductsValidator.parse(request.query);
+  const { page, limit, search } = findProductsValidator.parse(request.query);
 
   const productRepository = ProductFactory.createRepository();
   const findProductUseCase = new FindProductsUseCase(productRepository);
 
-  const products = await findProductUseCase.execute({ page, limit });
+  const products = await findProductUseCase.execute({ page, limit, name: search });
 
   response.json({ content: products });
 };
