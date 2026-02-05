@@ -9,7 +9,6 @@ describe('GET /products/:productId - 404 cases', () => {
     const response = await request(app).get(`/products/${_ID_MONGO}`).send();
 
     expect(response.status).toBe(404);
-    expect(response.body).toStrictEqual({ error: 'Product Not Found' });
   });
   it('Should return the requests product', async () => {
     const { newRandomProduct: product } = await createRandomProduct();

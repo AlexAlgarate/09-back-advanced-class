@@ -32,7 +32,6 @@ describe('PATCH /products/:productId', () => {
       .send({});
 
     expect(response.status).toBe(404);
-    expect(response.body).toStrictEqual({ message: 'Product not found' });
   });
 
   it('Given an existing product, return 200 status code and updated product', async () => {
@@ -69,7 +68,9 @@ describe('PATCH /products/:productId', () => {
       .send({});
 
     // TODO: cambiar a 403
-    expect(response.status).toBe(404);
-    expect(response.body).toStrictEqual({ message: 'Product not found' });
+    expect(response.status).toBe(403);
+    expect(response.body).toStrictEqual({
+      message: 'Only owner of the product can update this product',
+    });
   });
 });

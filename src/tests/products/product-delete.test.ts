@@ -31,7 +31,9 @@ describe('DELETE /products/:productId', () => {
       .send();
 
     expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: 'Product not found' });
+    expect(response.body).toEqual({
+      message: 'Product with id 6979054b067bd17c70d31fbf could not be found',
+    });
   });
 
   it('Given an existing product, delete it', async () => {
@@ -50,7 +52,7 @@ describe('DELETE /products/:productId', () => {
     expect(findProductResponse.status).toBe(404);
   });
 
-  it('Given a not product owner, return a Forbidden operation errpr', async () => {
+  it('Given a user that is not the product owner, return a Forbidden operation errpr', async () => {
     const { newRandomProduct } = await createRandomProduct();
     const token = await signupAndLogin('other@email.com', 'Other-Password');
 
@@ -61,7 +63,6 @@ describe('DELETE /products/:productId', () => {
       .set('Authorization', `Bearer ${token}`)
       .send();
 
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: 'Product not found' });
+    expect(response.status).toBe(403);
   });
 });

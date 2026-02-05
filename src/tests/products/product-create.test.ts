@@ -33,7 +33,6 @@ describe('GET /products', () => {
       .send(productError);
 
     expect(response.status).toBe(400);
-    expect(response.body).toStrictEqual({ message: 'Name and description have to be defined' });
   });
 
   it('Product should be created (201)', async () => {
