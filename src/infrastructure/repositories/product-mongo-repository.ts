@@ -50,7 +50,7 @@ export class ProductMongodbRepository implements ProductRepository {
       name: productDb.name,
       description: productDb.description,
       createdAt: productDb.createdAt,
-      ownerId: productDb.ownerId.toString(),
+      ownerId: productDb.ownerId?.toString(),
     });
   }
 }

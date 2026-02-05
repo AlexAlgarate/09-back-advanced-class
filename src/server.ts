@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { startHTTPApi } from './ui/api';
 import { environmentService } from '@infrastructure/services/environment-service';
+import * as Sentry from '@sentry/node';
 
 const loadEnvironment = (): void => {
   console.log('...loading environment');
@@ -15,9 +16,18 @@ const connectMongoDb = async (): Promise<void> => {
   console.log('Mongodb connected!');
 };
 
+const initializeSentry = (): void => {
+  const { SENTRY_DSN } = environmentService.get();
+
+  Sentry.init({
+    dsn: SENTRY_DSN,
+  });
+};
+
 const executeApp = async (): Promise<void> => {
   try {
     loadEnvironment();
+    initializeSentry();
     await connectMongoDb();
     startHTTPApi();
   } catch (error) {
