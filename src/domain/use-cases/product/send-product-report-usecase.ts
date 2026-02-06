@@ -28,9 +28,16 @@ export class SendProductReportUseCase {
         limit: 9999, // ! ProductModel.countDocuments({ ownerId: ownerId }) para obtener los productos de cada usuario
       });
       // 3º enviar un email con ese resumen
+      const productsList = products
+        .map(product => ` - ${product.name}: ${product.description}`)
+        .join('\n');
+
       void this.emailService.sendEmail(
         user.email,
-        `Hola, tienes publicados en la plataforma ${products.length} productos`,
+        `
+          Hola, tienes publicados en la plataforma ${products.length} productos.
+          ${productsList}
+        `,
         'Resumen semanal'
       );
     }

@@ -32,9 +32,8 @@ const initializeSentry = (): void => {
 
 const startCronJobs = (): void => {
   const WeeklyReportEmailJob_weekly_monday_at_10 = '1 * * * *';
-
-  schedule('* * * * *', () => {
-    console.log('Hola hola, arrancando');
+  schedule(WeeklyReportEmailJob_weekly_monday_at_10, async () => {
+    console.log('Starting email sending service..');
     const userRepository = new UserMongoRepository();
     const productRepository = new ProductMongodbRepository();
     const emailService = new MailtrapService();
@@ -44,8 +43,12 @@ const startCronJobs = (): void => {
       emailService
     );
 
-    void sendProductReportUseCase.execute();
-    console.log('Email sent!!');
+    try {
+      await sendProductReportUseCase.execute();
+      console.log('Email sent!!');
+    } catch (error) {
+      console.error('Error sending product report:', error);
+    }
   });
 };
 

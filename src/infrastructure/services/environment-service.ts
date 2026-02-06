@@ -10,6 +10,8 @@ const environmentVariablesValidator = z.object({
   JWT_SECRET: z.string(),
   SENTRY_DSN: z.url(),
   MAILTRAP_TOKEN: z.string(),
+  INBOXID: z.string(),
+  IS_SANDBOX: z.string(),
 });
 
 type EnvironmentVariables = z.infer<typeof environmentVariablesValidator>;
