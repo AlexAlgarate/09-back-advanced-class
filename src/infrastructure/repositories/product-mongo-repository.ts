@@ -18,13 +18,20 @@ export class ProductMongodbRepository implements ProductRepository {
     return this.restoreProduct(createdProduct);
   }
 
-  async findMany({ page, limit, name }: ProductFindQuery): Promise<Product[]> {
+  async findMany({ page, limit, name, ownerId }: ProductFindQuery): Promise<Product[]> {
     const searchQuery: QueryFilter<ProductMongoDb> = {};
 
     if (name) {
       // searchQuery.name = name // Esto sería si hiciéramos una búsqueda exacta
       searchQuery.name = { $regex: name, $options: 'i' };
     }
+
+    if (ownerId) {
+      searchQuery.ownerId = {
+        $eq: ownerId,
+      };
+    }
+
     const skip = (page - 1) * limit;
 
     const mongoProducts = await ProductModel.find(searchQuery).skip(skip).limit(limit);

@@ -31,4 +31,19 @@ export class UserMongoRepository implements UserRepository {
       createdAt: userDb.createdAt,
     });
   }
+
+  async find(): Promise<User[]> {
+    // TODO PAGINATION USER
+    const usersDb = await UserModel.find();
+
+    return usersDb.map(
+      userDb =>
+        new User({
+          email: userDb?.email,
+          password: userDb?.password,
+          id: userDb._id.toString(),
+          createdAt: userDb.createdAt,
+        })
+    );
+  }
 }
