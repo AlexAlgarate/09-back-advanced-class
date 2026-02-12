@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import * as z from 'zod';
 import { FindProductsUseCase } from '@domain/use-cases/product/find-products-usecase';
 import { ProductFactory } from '@ui/factories/product-factory';
-import { MailtrapService } from '@infrastructure/services/email-service';
+// import { MailtrapService } from '@infrastructure/services/email-service';
 
 const findProductsValidator = z.object({
   page: z.coerce.number(),

@@ -24,7 +24,7 @@ describe('PATCH /products/:productId', () => {
   });
 
   it('GIven a non existing product, return a 404 status code', async () => {
-    const token = await signupAndLogin();
+    const { token } = await createRandomProduct();
 
     const response = await request(app)
       .patch(`/products/${'6979054b067bd17c70d31fbf'}`)
